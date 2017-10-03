@@ -5,13 +5,9 @@ if(isset($_POST['delete'])){
 	$proj_id = $_POST['delete'];
 	$sqlDelete = "DELETE FROM project WHERE proj_id = '$proj_id'";
 	if($conn->query($sqlDelete) === true){
-		echo "
-			<script type='text/javascript'>alert('Project deleted successfully!')</script>
-			";
+		echo "<script type='text/javascript'>alert('Project deleted successfully!')</script>";
 	} else {
-		echo "
-			<script type='text/javascript'>alert('Error: ".$conn->error."')</script>
-			";
+		echo "<script type='text/javascript'>alert('Error: ".$conn->error."')</script>";
 	}
 }
 
@@ -30,8 +26,7 @@ if(isset($_POST['submit'])){
     $projectDescription = mysqli_real_escape_string($conn, $projectDescription);
 	list($projectOwner, $ownerId) = explode("-" , $_POST['owner'], 2);
 
-	$sqlInsert = $conn->prepare("INSERT INTO project(proj_name, proj_desc, owner_emp_id) 
-					VALUES(?, ?, ?)");
+	$sqlInsert = $conn->prepare("INSERT INTO project(proj_name, proj_desc, owner_emp_id) VALUES(?, ?, ?)");
 	$sqlInsert->bind_param('ssi', $projectName, $projectDescription, $ownerId);
 	//End 'filtering'
 	
@@ -44,8 +39,10 @@ if(isset($_POST['submit'])){
 	}
 }
 
-$sqlProjects = "SELECT proj_name, proj_desc, proj_id, emp_fname, emp_lname FROM project
-					INNER JOIN employees ON project.owner_emp_id = employees.emp_id";
+$sqlProjects = "
+	SELECT proj_name, proj_desc, proj_id, emp_fname, emp_lname 
+	FROM project
+	INNER JOIN employees ON project.owner_emp_id = employees.emp_id";
 $sqlName = "SELECT * FROM employees";
 
 $projectResults = $conn->query($sqlProjects);

@@ -9,13 +9,9 @@ if(isset($_POST['delete'])){
 	list($req_id, $projID) = explode("-" , $_POST['delete'], 2);
 	$sqlDelete = "DELETE FROM requirements WHERE req_id = '$req_id'";
 	if($conn->query($sqlDelete) === true){
-		echo "
-			<script type='text/javascript'>alert('Requirement deleted successfully!')</script>
-			";
+		echo "<script type='text/javascript'>alert('Requirement deleted successfully!')</script>";
 	} else {
-		echo "
-			<script type='text/javascript'>alert('Error: ".$conn->error."')</script>
-			";
+		echo "<script type='text/javascript'>alert('Error: ".$conn->error."')</script>";
 	}
 }
 
@@ -23,13 +19,9 @@ if(isset($_POST['deleteRisk'])){
 	list($risk_id, $projID) = explode("-" , $_POST['deleteRisk'], 2);
 	$sqlDelete = "DELETE FROM risks WHERE risk_id = '$risk_id'";
 	if($conn->query($sqlDelete) === true){
-		echo "
-			<script type='text/javascript'>alert('Risk deleted successfully!')</script>
-			";
+		echo "<script type='text/javascript'>alert('Risk deleted successfully!')</script>";
 	} else {
-		echo "
-			<script type='text/javascript'>alert('Error: ".$conn->error."')</script>
-			";
+		echo "<script type='text/javascript'>alert('Error: ".$conn->error."')</script>";
 	}
 }
 
@@ -47,8 +39,7 @@ if(isset($_POST['submit'])){
     $reqName = mysqli_real_escape_string($conn, $reqName);
     $reqDescription = mysqli_real_escape_string($conn, $reqDescription);
 	
-	$sqlInsert = $conn->prepare("INSERT INTO requirements(req_name, req_desc, proj_id) 
-					VALUES(?, ?, ?)");
+	$sqlInsert = $conn->prepare("INSERT INTO requirements(req_name, req_desc, proj_id) VALUES(?, ?, ?)");
 	$sqlInsert->bind_param('ssi', $reqName, $reqDescription, $projID);
 	//End 'filtering'
 	
@@ -78,8 +69,7 @@ if(isset($_POST['submitRisk'])){
     $riskDescription = mysqli_real_escape_string($conn, $riskDescription);
 	$riskStatus = mysqli_real_escape_string($conn, $riskStatus);
 	
-	$sqlInsert = $conn->prepare("INSERT INTO risks(risk_name, risk_desc, risk_status, proj_id) 
-					VALUES(?, ?, ?, ?)");
+	$sqlInsert = $conn->prepare("INSERT INTO risks(risk_name, risk_desc, risk_status, proj_id) VALUES(?, ?, ?, ?)");
 	$sqlInsert->bind_param('sssi', $riskName, $riskDescription, $riskStatus, $projID);
 	//End 'filtering'
 	
@@ -93,15 +83,24 @@ if(isset($_POST['submitRisk'])){
 }
 //End isset POST
 
-$sqlProject = "SELECT * FROM project
-				INNER JOIN employees ON project.owner_emp_id = employees.emp_id
-				WHERE project.proj_id = '$projID'";
-$sqlRequirements = "SELECT * FROM requirements WHERE proj_id = '$projID'";
-$sqlAssignment = "SELECT DISTINCT assignment.emp_id, employees.emp_id, emp_fname, emp_lname, proj_id
-					FROM assignment
-					INNER JOIN employees ON assignment.emp_id = employees.emp_id
-					WHERE proj_id = '$projID'";
-$sqlRisks = "SELECT * FROM risks WHERE proj_id = '$projID'";
+$sqlProject = "
+	SELECT * 
+	FROM project
+	INNER JOIN employees ON project.owner_emp_id = employees.emp_id
+	WHERE project.proj_id = '$projID'";
+$sqlRequirements = "
+	SELECT * 
+	FROM requirements 
+	WHERE proj_id = '$projID'";
+$sqlAssignment = "
+	SELECT DISTINCT assignment.emp_id, employees.emp_id, emp_fname, emp_lname, proj_id
+	FROM assignment
+	INNER JOIN employees ON assignment.emp_id = employees.emp_id
+	WHERE proj_id = '$projID'";
+$sqlRisks = "
+	SELECT * 
+	FROM risks 
+	WHERE proj_id = '$projID'";
 
 $projectResults = $conn->query($sqlProject);
 $requirementsResults = $conn->query($sqlRequirements);
@@ -141,13 +140,15 @@ $projectRows = $projectResults->fetch_assoc();
 				echo "
 					<tr>
 						<td>No Assigned Employees</td>
-					</tr>";
+					</tr>
+				";
 			} else {
 				while($row = $assignmentResults->fetch_assoc()){
 					echo "
 						<tr>
 							<td>".$row['emp_fname']." ".$row['emp_lname']."</td>
-						</tr>";
+						</tr>
+					";
 				}
 			}
 			?>
@@ -213,11 +214,14 @@ $projectRows = $projectResults->fetch_assoc();
 						<td></td>
 						<td></td>
 						<td></td>
-					</tr>";
+					</tr>
+				";
 			} else {
 				while($row = $requirementsResults->fetch_assoc()){
-					$sqlHours = "SELECT SUM(req_ana_hours + design_hours + coding_hours + testing_hours + management_hours) AS total_hours
-									FROM hours_worked WHERE req_id = '$row[req_id]'";
+					$sqlHours = "
+						SELECT SUM(req_ana_hours + design_hours + coding_hours + testing_hours + management_hours) AS total_hours
+						FROM hours_worked 
+						WHERE req_id = '$row[req_id]'";
 					$hoursResults = $conn->query($sqlHours);
 					$rowHours = $hoursResults->fetch_assoc();
 					$hours = $rowHours['total_hours'];
@@ -241,7 +245,8 @@ $projectRows = $projectResults->fetch_assoc();
 									<button type='submit' class='btn btn-danger' name ='delete' value='".$row['req_id']."-".$projID."'>Delete</button>
 								</form>
 							</td>
-						</tr>";
+						</tr>
+					";
 				}
 			}
 			?>
@@ -311,7 +316,8 @@ $projectRows = $projectResults->fetch_assoc();
 						<td></td>
 						<td></td>
 						<td></td>
-					</tr>";
+					</tr>
+				";
 			} else {
 				while($row = $riskResults->fetch_assoc()){
 					echo "
@@ -324,7 +330,8 @@ $projectRows = $projectResults->fetch_assoc();
 									<button type='submit' class='btn btn-danger' name ='deleteRisk' value='".$row['risk_id']."-".$projID."'>Delete</button>
 								</form>
 							</td>
-						</tr>";
+						</tr>
+					";
 				}
 			}
 			?>

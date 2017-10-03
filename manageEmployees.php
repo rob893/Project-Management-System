@@ -5,13 +5,9 @@ if(isset($_POST['deleteEmployee'])){
 	$emp_id = $_POST['deleteEmployee'];
 	$sqlDelete = "DELETE FROM employees WHERE emp_id = '$emp_id'";
 	if($conn->query($sqlDelete) === true){
-		echo "
-			<script type='text/javascript'>alert('Employee deleted successfully!')</script>
-			";
+		echo "<script type='text/javascript'>alert('Employee deleted successfully!')</script>";
 	} else {
-		echo "
-			<script type='text/javascript'>alert('Error: ".$conn->error."')</script>
-			";
+		echo "<script type='text/javascript'>alert('Error: ".$conn->error."')</script>";
 	}
 }
 
@@ -28,8 +24,7 @@ if(isset($_POST['submitEmployee'])){
     $empFname = mysqli_real_escape_string($conn, $empFname);
     $empLname = mysqli_real_escape_string($conn, $empLname);
 	
-	$sqlInsert = $conn->prepare("INSERT INTO employees(emp_fname, emp_lname) 
-					VALUES(?, ?)");
+	$sqlInsert = $conn->prepare("INSERT INTO employees(emp_fname, emp_lname) VALUES(?, ?)");
 	$sqlInsert->bind_param('ss', $empFname, $empLname);
 	//End 'filtering'
 	

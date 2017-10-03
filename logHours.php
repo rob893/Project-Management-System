@@ -34,11 +34,12 @@ if(!isset($_POST['empName']) && !isset($_POST['assignment']) && !isset($_POST['s
 if(isset($_POST['empName'])){
 	list($empName, $empId) = explode("-", $_POST['empName'], 2);
 	
-	$sqlAssignments = "SELECT * FROM assignment
-						INNER JOIN requirements ON assignment.req_id = requirements.req_id
-						INNER JOIN employees ON assignment.emp_id = employees.emp_id
-						INNER JOIN project ON assignment.proj_id = project.proj_id
-						WHERE assignment.emp_id =  '$empId'";
+	$sqlAssignments = "
+		SELECT * FROM assignment
+		INNER JOIN requirements ON assignment.req_id = requirements.req_id
+		INNER JOIN employees ON assignment.emp_id = employees.emp_id
+		INNER JOIN project ON assignment.proj_id = project.proj_id
+		WHERE assignment.emp_id =  '$empId'";
 	$assignmentsResults = $conn->query($sqlAssignments);
 	?>
 	<div class='container-fluid'>
@@ -69,11 +70,12 @@ if(isset($_POST['empName'])){
 
 if(isset($_POST['assignment'])){
 	list($assignId, $empId, $projId, $reqId) = explode("-", $_POST['assignment'], 4);
-	$sqlAssignment = "SELECT * FROM assignment
-						INNER JOIN requirements ON assignment.req_id = requirements.req_id
-						INNER JOIN employees ON assignment.emp_id = employees.emp_id
-						INNER JOIN project ON assignment.proj_id = project.proj_id
-						WHERE assign_id = '$assignId'";
+	$sqlAssignment = "
+		SELECT * FROM assignment
+		INNER JOIN requirements ON assignment.req_id = requirements.req_id
+		INNER JOIN employees ON assignment.emp_id = employees.emp_id
+		INNER JOIN project ON assignment.proj_id = project.proj_id
+		WHERE assign_id = '$assignId'";
 	$assignmentResults = $conn->query($sqlAssignment);
 	$assignmentRow = $assignmentResults->fetch_assoc();
 	?>
@@ -134,20 +136,25 @@ if(isset($_POST['submitHours'])){
 	$testingHours = $_POST["testingHours"];
 	$managementHours = $_POST["managementHours"];
 	
-	$sqlInsertHours = $conn->prepare("INSERT INTO hours_worked(assign_id, emp_id, req_id, proj_id, date, req_ana_hours, design_hours, coding_hours, testing_hours, management_hours)
-							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	$sqlInsertHours = $conn->prepare("
+		INSERT INTO hours_worked(assign_id, emp_id, req_id, proj_id, date, req_ana_hours, design_hours, coding_hours, testing_hours, management_hours)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	$sqlInsertHours->bind_param('iiiisiiiii', $assignId, $empId, $reqId, $projId, $date, $reqAnaHours, $designHours, $codingHours, $testingHours, $managementHours);
 	if($sqlInsertHours->execute() === true){
-		echo "<script type='text/javascript'>alert('Success! Hours have been logged!')</script>
+		echo "
+			<script type='text/javascript'>alert('Success! Hours have been logged!')</script>
 			<div class='container-fluid'>
 				<h3>Hours have been logged!</h3>
-			</div>";
+			</div>
+		";
 		$sqlInsertHours->close();
 	} else {
-		echo "<script type='text/javascript'>alert('Error: ".$sqlInsertHours->error."')</script>
+		echo "
+			<script type='text/javascript'>alert('Error: ".$sqlInsertHours->error."')</script>
 			<div class='container-fluid'>
 				<h3>An error has occurred. Hours have not been logged.</h3>
-			</div>";
+			</div>
+		";
 		$sqlInsertHours->close();
 	}
 }

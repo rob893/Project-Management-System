@@ -3,18 +3,23 @@ require_once('header.php');
 
 $empId = $_POST['manageEmployee'];
 
-$sqlEmployeeAssignments = "SELECT project.proj_name, requirements.req_id, requirements.req_name FROM employees
-							INNER JOIN assignment ON employees.emp_id = assignment.emp_id
-							INNER JOIN requirements ON assignment.req_id = requirements.req_id
-							INNER JOIN project ON assignment.proj_id = project.proj_id
-							WHERE employees.emp_id = '$empId'";
-$sqlEmployee = "SELECT * FROM employees
-					INNER JOIN assignment ON employees.emp_id = assignment.emp_id
-					INNER JOIN requirements ON requirements.req_id = assignment.req_id
-					INNER JOIN project ON project.proj_id = assignment.proj_id
-					INNER JOIN hours_worked ON assignment.assign_id = hours_worked.assign_id
-					WHERE employees.emp_id = '$empId'";
-$sqlBasicInfo = "SELECT * FROM employees WHERE emp_id = '$empId'";
+$sqlEmployeeAssignments = "
+	SELECT project.proj_name, requirements.req_id, requirements.req_name FROM employees
+	INNER JOIN assignment ON employees.emp_id = assignment.emp_id
+	INNER JOIN requirements ON assignment.req_id = requirements.req_id
+	INNER JOIN project ON assignment.proj_id = project.proj_id
+	WHERE employees.emp_id = '$empId'";
+$sqlEmployee = "
+	SELECT * FROM employees
+	INNER JOIN assignment ON employees.emp_id = assignment.emp_id
+	INNER JOIN requirements ON requirements.req_id = assignment.req_id
+	INNER JOIN project ON project.proj_id = assignment.proj_id
+	INNER JOIN hours_worked ON assignment.assign_id = hours_worked.assign_id
+	WHERE employees.emp_id = '$empId'";
+$sqlBasicInfo = "
+	SELECT * 
+	FROM employees 
+	WHERE emp_id = '$empId'";
 
 $employeeInfoResults = $conn->query($sqlBasicInfo);
 $employeeBasicInfo = $employeeInfoResults->fetch_assoc();
@@ -40,7 +45,8 @@ $employeeBasicInfo = $employeeInfoResults->fetch_assoc();
 						<td>No Assignments.</td>
 						<td></td>
 						<td></td>
-					</tr>";
+					</tr>
+				";
 			} else {
 				$assignmentResults = $conn->query($sqlEmployeeAssignments);
 				while($row = $assignmentResults->fetch_assoc()){
@@ -89,7 +95,8 @@ $employeeBasicInfo = $employeeInfoResults->fetch_assoc();
 						<td></td>
 						<td></td>
 						<td></td>
-					</tr>";
+					</tr>
+				";
 			} else {
 				$employeeResults = $conn->query($sqlEmployee);
 				while($row = $employeeResults->fetch_assoc()){

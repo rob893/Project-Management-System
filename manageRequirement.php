@@ -27,12 +27,14 @@ if(isset($_POST['submitAssignment'])){
 	$projID = $_POST['projID'];
 	$reqName = $_POST['reqName'];
 	
-	$sqlAssignmentTest = "SELECT * FROM assignment WHERE emp_id = '$empId' AND req_id = '$reqID'";
+	$sqlAssignmentTest = "
+		SELECT * 
+		FROM assignment 
+		WHERE emp_id = '$empId' AND req_id = '$reqID'";
 	$assignmentTestResult = $conn->query($sqlAssignmentTest);
 	
 	if($assignmentTestResult->fetch_assoc() === null){ //if the employee has not already been assigned to this requirement.
-		$sqlInsert = $conn->prepare("INSERT INTO assignment(req_id, proj_id, emp_id) 
-						VALUES(?, ?, ?)");
+		$sqlInsert = $conn->prepare("INSERT INTO assignment(req_id, proj_id, emp_id) VALUES(?, ?, ?)");
 		$sqlInsert->bind_param('iii', $reqID, $projID, $empId);
 		
 		if($sqlInsert->execute() === true){
@@ -43,19 +45,22 @@ if(isset($_POST['submitAssignment'])){
 			$sqlInsert->close();
 		}
 	} else { //If the employee is already assigned to this requirement.
-		echo "<script type='text/javascript'>alert('Error: ".$empName." has been is already assigned to ".$reqName."! An employee cannot be assigned to the same requirement twice.')</script>";
+		echo "<script type='text/javascript'>alert('Error: ".$empName." has already been assigned to ".$reqName."! An employee cannot be assigned to the same requirement twice.')</script>";
 	}
 }
 
-$sqlRequirements = "SELECT * FROM requirements
-						INNER JOIN assignment ON requirements.req_id = assignment.req_id
-						INNER JOIN project ON requirements.proj_id = project.proj_id
-						INNER JOIN employees ON assignment.emp_id = employees.emp_id
-						WHERE requirements.req_id = '$reqID'";
+$sqlRequirements = "
+	SELECT * 
+	FROM requirements
+	INNER JOIN assignment ON requirements.req_id = assignment.req_id
+	INNER JOIN project ON requirements.proj_id = project.proj_id
+	INNER JOIN employees ON assignment.emp_id = employees.emp_id
+	WHERE requirements.req_id = '$reqID'";
 $sqlEmployees = "SELECT * FROM employees";
-$sqlRequirements2 = "SELECT * FROM requirements 
-						INNER JOIN project ON requirements.proj_id = project.proj_id
-						WHERE req_id = '$reqID'";
+$sqlRequirements2 = "
+	SELECT * FROM requirements 
+	INNER JOIN project ON requirements.proj_id = project.proj_id
+	WHERE req_id = '$reqID'";
 					
 $basicInfoResults = $conn->query($sqlRequirements);
 $nameResults = $conn->query($sqlEmployees);
@@ -158,17 +163,19 @@ if($infoRows['req_id'] === null){ //If a requirement does not have an assignment
 						<td></td>
 						<td></td>
 						<td></td>
-					</tr>";
+					</tr>
+				";
 			} else {
 				$requirementsResults = $conn->query($sqlRequirements);
 				while($rowReq = $requirementsResults->fetch_assoc()){
 					$empTotalHours = 0;
-					$sqlHours = "SELECT SUM(req_ana_hours) AS total_req_ana, SUM(design_hours) AS total_design, SUM(coding_hours) AS total_coding, SUM(testing_hours) AS total_testing, 
-									SUM(management_hours) AS total_management, emp_fname, emp_lname, assignment.assign_id AS assignment_id
-									FROM hours_worked
-									INNER JOIN assignment ON assignment.assign_id = hours_worked.assign_id
-									INNER JOIN employees ON assignment.emp_id = employees.emp_id
-									WHERE assignment.emp_id = '$rowReq[emp_id]' AND assignment.req_id = '$rowReq[req_id]'";
+					$sqlHours = "
+						SELECT SUM(req_ana_hours) AS total_req_ana, SUM(design_hours) AS total_design, SUM(coding_hours) AS total_coding, SUM(testing_hours) AS total_testing, 
+							SUM(management_hours) AS total_management, emp_fname, emp_lname, assignment.assign_id AS assignment_id
+						FROM hours_worked
+						INNER JOIN assignment ON assignment.assign_id = hours_worked.assign_id
+						INNER JOIN employees ON assignment.emp_id = employees.emp_id
+						WHERE assignment.emp_id = '$rowReq[emp_id]' AND assignment.req_id = '$rowReq[req_id]'";
 					$hoursResults = $conn->query($sqlHours);
 					while($row = $hoursResults->fetch_assoc()){
 						$empTotalHours = $row['total_req_ana'] + $row['total_design'] + $row['total_coding'] + $row['total_testing'] + $row['total_management'];
@@ -188,7 +195,10 @@ if($infoRows['req_id'] === null){ //If a requirement does not have an assignment
 							$row['total_management'] = 0;
 						}
 						if($row['assignment_id'] === null){ //If the employee has been assigned to a requirement but has not yet logged any hours
-							$sqlAssignId = "SELECT assign_id FROM assignment WHERE req_id = '$reqID' AND emp_id = '$rowReq[emp_id]'";
+							$sqlAssignId = "
+								SELECT assign_id 
+								FROM assignment 
+								WHERE req_id = '$reqID' AND emp_id = '$rowReq[emp_id]'";
 							$assignIdResult = $conn->query($sqlAssignId);
 							$assignRow = $assignIdResult->fetch_assoc();
 							$row['assignment_id'] = $assignRow['assign_id'];
@@ -217,7 +227,8 @@ if($infoRows['req_id'] === null){ //If a requirement does not have an assignment
 										<button type='submit' class='btn btn-danger' name ='removeAssignment' value='".$row['assignment_id']."'>Delete</button>
 									</form>
 								</td>
-							</tr>";
+							</tr>
+						";
 					}
 				}
 			}
