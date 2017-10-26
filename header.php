@@ -17,11 +17,10 @@ require_once('dbconnection.php');
 	<body>
 		<div class="jumbotron">
 			<h1>Project Management System</h1>
-			<p>Include this header file in all documents as it has the bootstrap link, database connection, and the opening html and body tags (Obviously, I will remove this sentence from the final version).</p>
 			<a href="index.php" class='btn btn-info' role='button'>Home</a>
 			<a href="manageProjects.php" class='btn btn-info' role='button'>Manage Projects</a>
 			<a href="manageEmployees.php" class='btn btn-info' role='button'>Manage Employees</a>
 			<a href="logHours.php" class='btn btn-info' role='button'>Log Hours</a>
 			<br>
-			<a href='allData.php'>Click here to see all tables and data currently in the database. This is for testing only (Obviously, I will remove this sentence from the final version).</a>
+			<a href='allData.php'>Click here to see all tables and data currently in the database.</a>
 		</div>

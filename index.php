@@ -16,7 +16,7 @@ require_once('header.php');
 		<li>Gentle Calhoun</li>
 		<li>Alexis Harrell</li>
 		<li>Pete Smith</li>
-		<li>Paul Smith</li>
+		<li>Paul Thim</li>
 	</ul>
 </div>
 			
