@@ -113,7 +113,7 @@ $nameResults = $conn->query($sqlName);
 				<th>Delete Project</th>
 			</tr>
 		</thead>
-		</tbody>
+		<tbody>
 			<?php
 			while($row = $projectResults->fetch_assoc()){
 				echo "

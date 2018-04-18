@@ -20,8 +20,7 @@ echo "
 		<h2>All Data</h2>
 		<p>
 			This page simply displays all the data in the database. This includes the test data I direcly put in there and the data to be inserted through the app. 
-			Obviously this is for testing purposes. This is here so that everyone is able to see the data without needing access to the database management system (as I would have
-			to give you my goDaddy account info which I don't want to do). If you want/need to change the way the tables are laid out, let me know and I will do it. Thanks!
+			Obviously this is for testing purposes and so interested people could see how the database was designed.
 		</p>
 		<h3>Database Diagram</h3>
 		<img src='DatabaseERDiagram.jpg' alt='Database Diagram'>
