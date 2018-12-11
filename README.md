@@ -1,5 +1,5 @@
 # Project Management System
-You can view the deployed application here: http://ksucsprojects.com/ProjectManagementSystem/index.php
+You can view the deployed application here: https://rwherber.com/ProjectManagementSystem/
 
 What initially started out as a school project turned into a personal project of mine after I continued to develop it long after turning it in. I continued developing this project to hone my PHP, SQL, and Bootstrap skills.
 
